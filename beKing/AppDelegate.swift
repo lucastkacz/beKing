@@ -9,12 +9,11 @@ import Cocoa
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
     // We’ll create and keep our status bar controller here later.
-    // private var menuBarController: MenuBarController?
+    private var menuBarController: MenuBarController?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        // For now, just confirm lifecycle.
         NSLog("[beKing] App launched")
-        // Next step: instantiate MenuBarController()
+        self.menuBarController = MenuBarController()
     }
 
     func applicationWillTerminate(_ notification: Notification) {
