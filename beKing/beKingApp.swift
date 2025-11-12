@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct beKingApp: App {
+    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+
     var body: some Scene {
-        WindowGroup {
-            ContentView()
+        // No initial windows. We'll add Preferences later to this Settings scene.
+        Settings {
+            EmptyView()
         }
     }
 }

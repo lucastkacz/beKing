@@ -39,18 +39,6 @@ Designed for people who appreciate automation and minimal configuration.
    * *Speak affirmation aloud* → record & playback.
    * *Smile challenge* → photo capture (if webcam available).
 
-Prompt schema:
-
-```json
-{
-  "id": "uuid",
-  "type": "affirmation | journal | action",
-  "text": "string",
-  "tags": ["confidence","gratitude"],
-  "weight": 3
-}
-```
-
 ---
 
 ### 5. user features (mvp)
