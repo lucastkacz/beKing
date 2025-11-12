@@ -3,8 +3,10 @@ import Cocoa
 final class MenuBarController {
     private let statusItem: NSStatusItem
     private let menu = NSMenu()
+    private let presenter: PromptWindowHost     // add this line
 
-    init() {
+    init(promptPresenter: PromptWindowHost) {   // <-- new initializer
+        self.presenter = promptPresenter
         self.statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
 
         if let button = statusItem.button {
@@ -14,6 +16,8 @@ final class MenuBarController {
 
         buildMenu()
     }
+
+
 
     private func buildMenu() {
         let showItem = NSMenuItem(title: "Show Prompt Now", action: #selector(showPromptNow), keyEquivalent: "")
@@ -30,9 +34,9 @@ final class MenuBarController {
     }
 
     // MARK: - Actions
+    
     @objc private func showPromptNow() {
-        NSLog("[beKing] Show Prompt Now (stub)")
-        // Next increment: open a tiny SwiftUI window.
+        presenter.show()
     }
 
     @objc private func openPreferences() {

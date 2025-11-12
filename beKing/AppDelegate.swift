@@ -8,12 +8,12 @@
 import Cocoa
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
-    // We’ll create and keep our status bar controller here later.
     private var menuBarController: MenuBarController?
+    private let promptHost = PromptWindowHost()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSLog("[beKing] App launched")
-        self.menuBarController = MenuBarController()
+        self.menuBarController = MenuBarController(promptPresenter: promptHost)
     }
 
     func applicationWillTerminate(_ notification: Notification) {
