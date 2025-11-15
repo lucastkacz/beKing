@@ -7,36 +7,12 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		25CD72972EC3B1A20007F671 /* beKing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = beKing.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		25CD72972EC3B1A20007F671 /* beKing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = beKing.app; path = /Users/lucastkacz/Documents/beKing/build/Debug/beKing.app; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		25FA64942EC515ED003CDA90 /* Exceptions for "beKing" folder in "beKing" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"docs/journal/Task 1.md",
-			);
-			target = 25CD72962EC3B1A20007F671 /* beKing */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
-/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-		25FA64952EC515ED003CDA90 /* Exceptions for "beKing" folder in "Compile Sources" phase from "beKing" target */ = {
-			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
-			buildPhase = 25CD72932EC3B1A20007F671 /* Sources */;
-			membershipExceptions = (
-				"docs/journal/Task 1.md",
-			);
-		};
-/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		25CD72992EC3B1A20007F671 /* beKing */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				25FA64942EC515ED003CDA90 /* Exceptions for "beKing" folder in "beKing" target */,
-				25FA64952EC515ED003CDA90 /* Exceptions for "beKing" folder in "Compile Sources" phase from "beKing" target */,
-			);
 			path = beKing;
 			sourceTree = "<group>";
 		};
@@ -57,16 +33,7 @@
 			isa = PBXGroup;
 			children = (
 				25CD72992EC3B1A20007F671 /* beKing */,
-				25CD72982EC3B1A20007F671 /* Products */,
 			);
-			sourceTree = "<group>";
-		};
-		25CD72982EC3B1A20007F671 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				25CD72972EC3B1A20007F671 /* beKing.app */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -119,7 +86,7 @@
 			mainGroup = 25CD728E2EC3B1A20007F671;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 25CD72982EC3B1A20007F671 /* Products */;
+			productRefGroup = 25CD728E2EC3B1A20007F671;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
