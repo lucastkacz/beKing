@@ -6,7 +6,11 @@ struct PreferencesView: View {
 
     @AppStorage(AppSettingsKeys.schedulerIntervalHours)
     private var schedulerIntervalHours: Int = AppSettings.default.schedulerIntervalHours
-
+    
+    private func notifySchedulerSettingsChanged() {
+        NotificationCenter.default.post(name: .schedulerSettingsDidChange, object: nil)
+    }
+    
     var body: some View {
         TabView {
             schedulerTab
@@ -20,6 +24,12 @@ struct PreferencesView: View {
         }
         .padding()
         .frame(width: 420, height: 260)
+        .onChange(of: schedulerEnabled) {
+            notifySchedulerSettingsChanged()
+        }
+        .onChange(of: schedulerIntervalHours) {
+            notifySchedulerSettingsChanged()
+        }
     }
 
     private var schedulerTab: some View {

@@ -1,10 +1,3 @@
-//
-//  AppDelegate.swift
-//  beKing
-//
-//  Created by Lucas Tkacz on 12/11/2025.
-//
-
 import Cocoa
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
@@ -21,24 +14,40 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             preferencesPresenter: preferencesHost
         )
 
-        // Scheduler uses app settings
-        let settings = AppSettings.load()
-        scheduler = Scheduler { [weak self] in
-            NSLog("[beKing] Scheduler fired - showing prompt")
-            self?.promptHost.show()
-        }
+        // Initial scheduler config from settings
+        configureSchedulerFromSettings()
 
-        if settings.schedulerEnabled {
-            scheduler?.scheduleInterval(hours: settings.schedulerIntervalHours)
-        } else {
-            scheduler?.stop()
+        // Listen for live changes coming from PreferencesView
+        NotificationCenter.default.addObserver(
+            forName: .schedulerSettingsDidChange,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.configureSchedulerFromSettings()
         }
-
-        NSLog("[beKing] Scheduler initial config: enabled=\(settings.schedulerEnabled), interval=\(settings.schedulerIntervalHours)h")
     }
 
     func applicationWillTerminate(_ notification: Notification) {
         NSLog("[beKing] App will terminate")
+    }
+    
+    private func configureSchedulerFromSettings() {
+        let settings = AppSettings.load()
+
+        if scheduler == nil {
+            scheduler = Scheduler { [weak self] in
+                NSLog("[beKing] Scheduler fired - showing prompt")
+                self?.promptHost.show()
+            }
+        }
+
+        if settings.schedulerEnabled {
+            scheduler?.scheduleInterval(hours: settings.schedulerIntervalHours)
+            NSLog("[beKing] Scheduler reconfigured: enabled=true, interval=\(settings.schedulerIntervalHours)h")
+        } else {
+            scheduler?.stop()
+            NSLog("[beKing] Scheduler reconfigured: enabled=false")
+        }
     }
     
     

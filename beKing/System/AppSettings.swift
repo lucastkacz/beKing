@@ -35,3 +35,7 @@ struct AppSettings {
         defaults.set(schedulerIntervalHours, forKey: AppSettingsKeys.schedulerIntervalHours)
     }
 }
+
+extension Notification.Name {
+    static let schedulerSettingsDidChange = Notification.Name("SchedulerSettingsDidChange")
+}
