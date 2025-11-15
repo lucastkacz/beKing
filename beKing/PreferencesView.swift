@@ -22,7 +22,7 @@ struct PreferencesView: View {
                 }
         }
         .padding()
-        .frame(width: 800, height: 400)
+        .frame(width: 480, height: 260)   // same for both tabs
         .onChange(of: schedulerEnabled) {
             notifySchedulerSettingsChanged()
         }
@@ -34,24 +34,31 @@ struct PreferencesView: View {
         }
     }
 
+    // MARK: - Triggers tab
+
     private var schedulerTab: some View {
-        Form {
+        VStack(alignment: .leading, spacing: 16) {
             Toggle("Enable automatic prompts", isOn: $schedulerEnabled)
 
             HStack {
                 Text("Interval (hours)")
                 Spacer()
-                Stepper(value: $schedulerIntervalHours, in: 1...24) {
-                    Text("\(schedulerIntervalHours) h")
-                }
-                .frame(width: 140)
+                Stepper("\(schedulerIntervalHours) h",
+                        value: $schedulerIntervalHours,
+                        in: 1...24)
+                    .monospacedDigit()
             }
+
             Text("Prompts will appear approximately every \(schedulerIntervalHours) hour(s) while the app is running.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
+
+            Spacer()
         }
         .padding()
     }
+
+    // MARK: - General tab
 
     private var generalTab: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -76,9 +83,7 @@ struct PreferencesView: View {
         .padding()
     }
 
-    
     private func notifySchedulerSettingsChanged() {
         NotificationCenter.default.post(name: .schedulerSettingsDidChange, object: nil)
     }
-    
 }
