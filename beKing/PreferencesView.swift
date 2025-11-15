@@ -6,11 +6,10 @@ struct PreferencesView: View {
 
     @AppStorage(AppSettingsKeys.schedulerIntervalHours)
     private var schedulerIntervalHours: Int = AppSettings.default.schedulerIntervalHours
-    
-    private func notifySchedulerSettingsChanged() {
-        NotificationCenter.default.post(name: .schedulerSettingsDidChange, object: nil)
-    }
-    
+
+    @AppStorage(AppSettingsKeys.launchAtLoginEnabled)
+    private var launchAtLoginEnabled: Bool = false   // default off
+
     var body: some View {
         TabView {
             schedulerTab
@@ -23,12 +22,15 @@ struct PreferencesView: View {
                 }
         }
         .padding()
-        .frame(width: 420, height: 260)
+        .frame(width: 800, height: 400)
         .onChange(of: schedulerEnabled) {
             notifySchedulerSettingsChanged()
         }
         .onChange(of: schedulerIntervalHours) {
             notifySchedulerSettingsChanged()
+        }
+        .onChange(of: launchAtLoginEnabled) {
+            LaunchAtLogin.setEnabled(launchAtLoginEnabled)
         }
     }
 
@@ -52,18 +54,31 @@ struct PreferencesView: View {
     }
 
     private var generalTab: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("beKing")
-                .font(.title2.bold())
-            Text("Lightweight menu-bar companion for self-improvement prompts.")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+        VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("beKing")
+                    .font(.title2.bold())
+                Text("Lightweight menu-bar companion for self-improvement prompts.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+
+            Divider()
+
+            Toggle("Open beKing at login", isOn: $launchAtLoginEnabled)
+
             Spacer()
+
             Text("v0.2.0 (dev)")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
-            Spacer()
         }
         .padding()
     }
+
+    
+    private func notifySchedulerSettingsChanged() {
+        NotificationCenter.default.post(name: .schedulerSettingsDidChange, object: nil)
+    }
+    
 }

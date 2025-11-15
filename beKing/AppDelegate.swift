@@ -3,8 +3,9 @@ import Cocoa
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private var menuBarController: MenuBarController?
     private let promptHost = PromptWindowHost()
-    private let preferencesHost = PreferencesWindowHost()   // <-- new
+    private let preferencesHost = PreferencesWindowHost()
     private var scheduler: Scheduler?
+    private var wakeListener: WakeListener?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSLog("[beKing] App launched")
@@ -13,11 +14,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             promptPresenter: promptHost,
             preferencesPresenter: preferencesHost
         )
+        
+        // Sync launch-at-login toggle from system status on launch
+        let isLoginItemEnabled = LaunchAtLogin.isEnabled
+        UserDefaults.standard.set(isLoginItemEnabled, forKey: AppSettingsKeys.launchAtLoginEnabled)
+        NSLog("[beKing] LaunchAtLogin initial status: \(isLoginItemEnabled)")
 
-        // Initial scheduler config from settings
+        // Initial scheduler config + reactive observer
         configureSchedulerFromSettings()
-
-        // Listen for live changes coming from PreferencesView
         NotificationCenter.default.addObserver(
             forName: .schedulerSettingsDidChange,
             object: nil,
@@ -25,6 +29,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         ) { [weak self] _ in
             self?.configureSchedulerFromSettings()
         }
+
+        // Wake listener
+        wakeListener = WakeListener { [weak self] in
+            NSLog("[beKing] WakeListener: showing prompt after wake")
+            self?.promptHost.show()
+        }
+        wakeListener?.start()
     }
 
     func applicationWillTerminate(_ notification: Notification) {

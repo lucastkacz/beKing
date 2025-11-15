@@ -3,6 +3,7 @@ import Foundation
 enum AppSettingsKeys {
     static let schedulerEnabled = "schedulerEnabled"
     static let schedulerIntervalHours = "schedulerIntervalHours"
+    static let launchAtLoginEnabled = "launchAtLoginEnabled"  
 }
 
 struct AppSettings {
@@ -39,3 +40,4 @@ struct AppSettings {
 extension Notification.Name {
     static let schedulerSettingsDidChange = Notification.Name("SchedulerSettingsDidChange")
 }
+
