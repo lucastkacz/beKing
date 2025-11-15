@@ -3,10 +3,13 @@ import Cocoa
 final class MenuBarController {
     private let statusItem: NSStatusItem
     private let menu = NSMenu()
-    private let presenter: PromptWindowHost     // add this line
+    private let presenter: PromptWindowHost
+    private let preferencesPresenter: PreferencesWindowHost   // <-- add
 
-    init(promptPresenter: PromptWindowHost) {   // <-- new initializer
+    init(promptPresenter: PromptWindowHost,
+         preferencesPresenter: PreferencesWindowHost) {
         self.presenter = promptPresenter
+        self.preferencesPresenter = preferencesPresenter
         self.statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
 
         if let button = statusItem.button {
@@ -23,7 +26,7 @@ final class MenuBarController {
         let showItem = NSMenuItem(title: "Show Prompt Now", action: #selector(showPromptNow), keyEquivalent: "")
         showItem.target = self
 
-        let prefsItem = NSMenuItem(title: "Preferences…", action: #selector(openPreferences), keyEquivalent: ",")
+        let prefsItem = NSMenuItem(title: "Preferences…", action: #selector(openPreferences(_:)), keyEquivalent: ",")
         prefsItem.target = self
 
         let quitItem = NSMenuItem(title: "Quit beKing", action: #selector(quit), keyEquivalent: "q")
@@ -35,16 +38,15 @@ final class MenuBarController {
 
     // MARK: - Actions
     
-    @objc private func showPromptNow() {
+    @objc private func showPromptNow(_ sender: Any?) {
         presenter.show()
     }
 
-    @objc private func openPreferences() {
-        // This triggers the SwiftUI Settings scene window (macOS 13+).
-        NSApp.sendAction(Selector(("showPreferencesWindow:")), to: nil, from: nil)
-    }
-
-    @objc private func quit() {
+    @objc private func quit(_ sender: Any?) {
         NSApp.terminate(nil)
+    }
+    
+    @objc private func openPreferences(_ sender: Any?) {
+        preferencesPresenter.show()
     }
 }
