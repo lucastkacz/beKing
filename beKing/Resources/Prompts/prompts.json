@@ -1,0 +1,33 @@
+[
+  {
+    "id": "affirmation-001",
+    "type": "affirmation",
+    "text": "You are making consistent progress. You should be proud.",
+    "tags": ["confidence", "progress"]
+  },
+  {
+    "id": "affirmation-002",
+    "type": "affirmation",
+    "text": "You have built an entire macOS app architecture by yourself.",
+    "tags": ["self-worth"]
+  },
+  {
+    "id": "journal-001",
+    "type": "journal",
+    "text": "What is one thing that went right today, and why?",
+    "tags": ["reflection"]
+  },
+  {
+    "id": "journal-002",
+    "type": "journal",
+    "text": "What is something that stressed you today? Write about it freely.",
+    "tags": ["stress"]
+  },
+  {
+    "id": "action-001",
+    "type": "action",
+    "text": "Take a deep breath through your nose, hold for 3 seconds, exhale slowly.",
+    "tags": ["mindfulness", "breathing"]
+  }
+]
+

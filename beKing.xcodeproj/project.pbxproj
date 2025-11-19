@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		25CD72972EC3B1A20007F671 /* beKing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = beKing.app; path = /Users/lucastkacz/Documents/beKing/build/Debug/beKing.app; sourceTree = "<absolute>"; };
+		25F113A72ECD3A460051C22F /* beKing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = beKing.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -33,6 +33,7 @@
 			isa = PBXGroup;
 			children = (
 				25CD72992EC3B1A20007F671 /* beKing */,
+				25F113A72ECD3A460051C22F /* beKing.app */,
 			);
 			sourceTree = "<group>";
 		};
@@ -58,7 +59,7 @@
 			packageProductDependencies = (
 			);
 			productName = beKing;
-			productReference = 25CD72972EC3B1A20007F671 /* beKing.app */;
+			productReference = 25F113A72ECD3A460051C22F /* beKing.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
