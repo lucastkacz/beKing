@@ -10,6 +10,15 @@ struct PreferencesView: View {
     @AppStorage(AppSettingsKeys.launchAtLoginEnabled)
     private var launchAtLoginEnabled: Bool = false   // default off
 
+    @AppStorage(AppSettingsKeys.includeAffirmations)
+    private var includeAffirmations: Bool = true
+
+    @AppStorage(AppSettingsKeys.includeJournalPrompts)
+    private var includeJournalPrompts: Bool = true
+
+    @AppStorage(AppSettingsKeys.includeActionPrompts)
+    private var includeActionPrompts: Bool = true
+
     var body: some View {
         TabView {
             schedulerTab
@@ -22,7 +31,7 @@ struct PreferencesView: View {
                 }
         }
         .padding()
-        .frame(width: 480, height: 260)   // same for both tabs
+        .frame(width: 520, height: 360)
         .onChange(of: schedulerEnabled) {
             notifySchedulerSettingsChanged()
         }
@@ -52,6 +61,16 @@ struct PreferencesView: View {
             Text("Prompts will appear approximately every \(schedulerIntervalHours) hour(s) while the app is running.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
+
+            Divider()
+                .padding(.vertical, 8)
+
+            Text("Prompt types")
+                .font(.headline)
+
+            Toggle("Affirmations", isOn: $includeAffirmations)
+            Toggle("Journal prompts", isOn: $includeJournalPrompts)
+            Toggle("Action prompts", isOn: $includeActionPrompts)
 
             Spacer()
         }

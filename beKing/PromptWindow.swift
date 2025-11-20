@@ -7,6 +7,7 @@ struct PromptWindow: View {
     let onSaveJournal: ((String) -> Void)?   // new
 
     @State private var journalText: String = ""      // used only for .journal
+    @State private var savedMessageVisible = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -25,6 +26,14 @@ struct PromptWindow: View {
                     .frame(minHeight: 120)
                     .padding(.top, 8)
             }
+            
+            if savedMessageVisible {
+                Text("Saved!")
+                    .foregroundColor(.green)
+                    .font(.footnote)
+                    .padding(.top, 4)
+            }
+
 
             Spacer(minLength: 0)
 
@@ -47,9 +56,16 @@ struct PromptWindow: View {
                         let trimmed = journalText.trimmingCharacters(in: .whitespacesAndNewlines)
                         guard !trimmed.isEmpty else { return }
                         onSaveJournal(trimmed)
-                        journalText = ""   // clear after save
+                        journalText = ""
+                        savedMessageVisible = true
+
+                        // Hide after 2 seconds
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                            savedMessageVisible = false
+                        }
                     }
                     .keyboardShortcut(.defaultAction)
+
                 }
             }
             .padding(.top, 8)

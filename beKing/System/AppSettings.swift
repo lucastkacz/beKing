@@ -3,20 +3,21 @@ import Foundation
 enum AppSettingsKeys {
     static let schedulerEnabled = "schedulerEnabled"
     static let schedulerIntervalHours = "schedulerIntervalHours"
-    static let launchAtLoginEnabled = "launchAtLoginEnabled"  
+    static let launchAtLoginEnabled = "launchAtLoginEnabled"
+    static let includeAffirmations = "includeAffirmations"
+    static let includeJournalPrompts = "includeJournalPrompts"
+    static let includeActionPrompts = "includeActionPrompts"
 }
 
 struct AppSettings {
     var schedulerEnabled: Bool
     var schedulerIntervalHours: Int
 
-    // Default configuration
     static let `default` = AppSettings(
         schedulerEnabled: true,
         schedulerIntervalHours: 4
     )
 
-    // Load from UserDefaults
     static func load() -> AppSettings {
         let defaults = UserDefaults.standard
 
@@ -29,7 +30,6 @@ struct AppSettings {
         return AppSettings(schedulerEnabled: enabled, schedulerIntervalHours: max(hours, 1))
     }
 
-    // Save to UserDefaults
     func save() {
         let defaults = UserDefaults.standard
         defaults.set(schedulerEnabled, forKey: AppSettingsKeys.schedulerEnabled)
@@ -40,4 +40,3 @@ struct AppSettings {
 extension Notification.Name {
     static let schedulerSettingsDidChange = Notification.Name("SchedulerSettingsDidChange")
 }
-
