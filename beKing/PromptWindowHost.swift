@@ -19,7 +19,14 @@ final class PromptWindowHost {
             onDislike: { [weak self] in
                 self?.promptEngine.recordDislike(for: prompt)
             },
-            onJournal: nil   // we’ll hook this later
+            onSaveJournal: prompt.type == .journal ? { text in
+                let entry = JournalEntry(
+                    promptId: prompt.id,
+                    text: text
+                )
+                JournalStore.append(entry)
+                NSLog("[beKing] Journal: saved inline entry for prompt \(prompt.id)")
+            } : nil
         )
 
         if let existingWindow = window,
@@ -28,7 +35,7 @@ final class PromptWindowHost {
         } else {
             let hosting = NSHostingController(rootView: view)
             let w = NSWindow(
-                contentRect: NSRect(x: 0, y: 0, width: 420, height: 200),
+                contentRect: NSRect(x: 0, y: 0, width: 480, height: 320),
                 styleMask: [.titled, .closable, .miniaturizable],
                 backing: .buffered,
                 defer: false

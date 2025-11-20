@@ -4,7 +4,9 @@ struct PromptWindow: View {
     let prompt: Prompt
     let onLike: () -> Void
     let onDislike: () -> Void
-    let onJournal: (() -> Void)?
+    let onSaveJournal: ((String) -> Void)?   // new
+
+    @State private var journalText: String = ""      // used only for .journal
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -15,6 +17,14 @@ struct PromptWindow: View {
             Text(prompt.text)
                 .font(.title3)
                 .padding(.top, 4)
+
+            if prompt.type == .journal {
+                TextEditor(text: $journalText)
+                    .font(.body)
+                    .border(Color(nsColor: .separatorColor), width: 1)
+                    .frame(minHeight: 120)
+                    .padding(.top, 8)
+            }
 
             Spacer(minLength: 0)
 
@@ -31,19 +41,21 @@ struct PromptWindow: View {
                     Label("Dislike", systemImage: "hand.thumbsdown")
                 }
 
-                if let onJournal = onJournal {
+                if prompt.type == .journal, let onSaveJournal = onSaveJournal {
                     Spacer()
-                    Button(action: {
-                        onJournal()
-                    }) {
-                        Label("Write", systemImage: "square.and-pencil")
+                    Button("Save") {
+                        let trimmed = journalText.trimmingCharacters(in: .whitespacesAndNewlines)
+                        guard !trimmed.isEmpty else { return }
+                        onSaveJournal(trimmed)
+                        journalText = ""   // clear after save
                     }
+                    .keyboardShortcut(.defaultAction)
                 }
             }
             .padding(.top, 8)
         }
         .padding(20)
-        .frame(width: 420, height: 200)
+        .frame(width: 480, height: prompt.type == .journal ? 320 : 200)
     }
 
     private var title: String {
