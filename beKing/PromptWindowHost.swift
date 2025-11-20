@@ -1,48 +1,54 @@
 import Cocoa
 import SwiftUI
 
-// Handles Esc by closing the window.
-final class PromptHostingController: NSHostingController<PromptWindow> {
-    override func cancelOperation(_ sender: Any?) {
-        self.view.window?.performClose(nil)
-    }
-}
-
 final class PromptWindowHost {
+
     private var window: NSWindow?
+    private let promptEngine = PromptEngine()
 
     func show() {
-        if let win = window {
-            win.makeKeyAndOrderFront(nil)
-            NSApp.activate(ignoringOtherApps: true)
+        guard let prompt = promptEngine.nextPrompt() else {
             return
         }
 
-        let controller = PromptHostingController(rootView: PromptWindow())
-        let win = NSWindow(
-            contentViewController: controller
+        let view = PromptWindow(
+            prompt: prompt,
+            onLike: { [weak self] in
+                self?.promptEngine.recordLike(for: prompt)
+            },
+            onDislike: { [weak self] in
+                self?.promptEngine.recordDislike(for: prompt)
+            },
+            onSaveJournal: prompt.type == .journal ? { text in
+                let entry = JournalEntry(
+                    promptId: prompt.id,
+                    text: text
+                )
+                JournalStore.append(entry)
+                NSLog("[beKing] Journal: saved inline entry for prompt \(prompt.id)")
+            } : nil
         )
-        win.styleMask = [.titled, .closable, .miniaturizable]  // ⌘W works by default
-        win.title = "beKing Prompt"
-        win.isReleasedWhenClosed = false
-        win.center()
-        win.setFrameAutosaveName("PromptWindow")
-        win.makeKeyAndOrderFront(nil)
 
-        // Keep reference and clean up when closed
-        NotificationCenter.default.addObserver(
-            forName: NSWindow.willCloseNotification,
-            object: win,
-            queue: .main
-        ) { [weak self] _ in
-            self?.window = nil
+        if let existingWindow = window,
+           let hosting = existingWindow.contentViewController as? NSHostingController<PromptWindow> {
+            hosting.rootView = view
+        } else {
+            let hosting = NSHostingController(rootView: view)
+            let w = NSWindow(
+                contentRect: NSRect(x: 0, y: 0, width: 480, height: 320),
+                styleMask: [.titled, .closable, .miniaturizable],
+                backing: .buffered,
+                defer: false
+            )
+            w.center()
+            w.title = "beKing Prompt"
+            w.contentViewController = hosting
+            w.isReleasedWhenClosed = false
+
+            self.window = w
         }
 
-        self.window = win
+        window?.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
-    }
-
-    func close() {
-        window?.performClose(nil)
     }
 }

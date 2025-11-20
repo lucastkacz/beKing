@@ -15,6 +15,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             preferencesPresenter: preferencesHost
         )
         
+        let repo = PromptRepository()
+        NSLog("[beKing] First prompt is: \(repo.allPrompts.first?.text ?? "none")")
+
         // Sync launch-at-login toggle from system status on launch
         let isLoginItemEnabled = LaunchAtLogin.isEnabled
         UserDefaults.standard.set(isLoginItemEnabled, forKey: AppSettingsKeys.launchAtLoginEnabled)
