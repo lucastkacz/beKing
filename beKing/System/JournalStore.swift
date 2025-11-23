@@ -1,6 +1,6 @@
 import Foundation
 
-struct JournalEntry: Codable, Identifiable {
+struct JournalEntry: Codable, Identifiable, Hashable {
     let id: UUID
     let promptId: String?
     let date: Date
