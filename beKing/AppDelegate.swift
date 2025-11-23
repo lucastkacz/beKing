@@ -4,15 +4,23 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var menuBarController: MenuBarController?
     private let promptHost = PromptWindowHost()
     private let preferencesHost = PreferencesWindowHost()
+    private let historyHost: HistoryWindowHost // Changed to non-private let
+    private let promptRepository = PromptRepository() // Add this
     private var scheduler: Scheduler?
     private var wakeListener: WakeListener?
+
+    override init() { // Add this initializer
+        self.historyHost = HistoryWindowHost(promptRepository: promptRepository)
+        super.init()
+    }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSLog("[beKing] App launched")
 
         self.menuBarController = MenuBarController(
             promptPresenter: promptHost,
-            preferencesPresenter: preferencesHost
+            preferencesPresenter: preferencesHost,
+            historyPresenter: historyHost
         )
         
         let repo = PromptRepository()
