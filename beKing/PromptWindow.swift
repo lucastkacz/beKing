@@ -3,9 +3,11 @@ import SwiftUI
 struct PromptWindow: View {
     let prompt: Prompt
     let audioService: AudioService
+    let cameraService: CameraService
     let onLike: () -> Void
     let onDislike: () -> Void
     let onSaveJournal: ((String) -> Void)?
+    let onComplete: () -> Void
 
     @State private var journalText: String = ""
     @State private var savedMessageVisible = false
@@ -27,7 +29,12 @@ struct PromptWindow: View {
                     .frame(minHeight: 120)
                     .padding(.top, 8)
             } else if prompt.type == .action {
-                ActionPromptView(audioService: audioService, prompt: prompt)
+                ActionPromptView(
+                    audioService: audioService,
+                    cameraService: cameraService,
+                    prompt: prompt,
+                    onComplete: onComplete
+                )
             }
             
             if savedMessageVisible {
@@ -67,7 +74,8 @@ struct PromptWindow: View {
             .padding(.top, 8)
         }
         .padding(20)
-        .frame(width: 480, height: prompt.type == .journal ? 320 : 200)
+        // Dynamically adjust height for different prompt types
+        .frame(width: 480, height: prompt.type == .action ? 320 : (prompt.type == .journal ? 320 : 200))
     }
 
     private var title: String {

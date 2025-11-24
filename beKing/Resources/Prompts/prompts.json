@@ -28,6 +28,12 @@
     "type": "action",
     "text": "Take a deep breath through your nose, hold for 3 seconds, exhale slowly.",
     "tags": ["mindfulness", "breathing"]
+  },
+  {
+    "id": "action-002",
+    "type": "action",
+    "text": "Time for a quick smile! Take a photo of your happy face.",
+    "tags": ["smile", "photo"]
   }
 ]
 
