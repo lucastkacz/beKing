@@ -2,11 +2,12 @@ import SwiftUI
 
 struct PromptWindow: View {
     let prompt: Prompt
+    let audioService: AudioService
     let onLike: () -> Void
     let onDislike: () -> Void
-    let onSaveJournal: ((String) -> Void)?   // new
+    let onSaveJournal: ((String) -> Void)?
 
-    @State private var journalText: String = ""      // used only for .journal
+    @State private var journalText: String = ""
     @State private var savedMessageVisible = false
 
     var body: some View {
@@ -25,6 +26,8 @@ struct PromptWindow: View {
                     .border(Color(nsColor: .separatorColor), width: 1)
                     .frame(minHeight: 120)
                     .padding(.top, 8)
+            } else if prompt.type == .action {
+                ActionPromptView(audioService: audioService, prompt: prompt)
             }
             
             if savedMessageVisible {
@@ -34,19 +37,14 @@ struct PromptWindow: View {
                     .padding(.top, 4)
             }
 
-
             Spacer(minLength: 0)
 
             HStack {
-                Button(action: {
-                    onLike()
-                }) {
+                Button(action: onLike) {
                     Label("Like", systemImage: "hand.thumbsup")
                 }
 
-                Button(action: {
-                    onDislike()
-                }) {
+                Button(action: onDislike) {
                     Label("Dislike", systemImage: "hand.thumbsdown")
                 }
 
@@ -58,14 +56,12 @@ struct PromptWindow: View {
                         onSaveJournal(trimmed)
                         journalText = ""
                         savedMessageVisible = true
-
                         // Hide after 2 seconds
                         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                             savedMessageVisible = false
                         }
                     }
                     .keyboardShortcut(.defaultAction)
-
                 }
             }
             .padding(.top, 8)
@@ -78,7 +74,7 @@ struct PromptWindow: View {
         switch prompt.type {
         case .affirmation: return "Affirmation"
         case .journal:     return "Journal Prompt"
-        case .action:      return "Action"
+        case .action:      return "Action Prompt"
         }
     }
 }

@@ -5,6 +5,7 @@ final class PromptWindowHost {
 
     private var window: NSWindow?
     private let promptEngine = PromptEngine()
+    private let audioService = AudioService()
 
     func show() {
         guard let prompt = promptEngine.nextPrompt() else {
@@ -13,6 +14,7 @@ final class PromptWindowHost {
 
         let view = PromptWindow(
             prompt: prompt,
+            audioService: audioService, // Pass the service
             onLike: { [weak self] in
                 self?.promptEngine.recordLike(for: prompt)
             },
