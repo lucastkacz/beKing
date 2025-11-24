@@ -1,35 +1,47 @@
 # Task 5: Action Prompts (Mic & Camera)
 
-**Date Started:** November 23, 2025
+**Date Completed:** November 23, 2025
 
 ### 1. Feature Overview
 
-This task focuses on implementing the interactive "Action" prompt types, which require access to the user's microphone and camera. This will add a new dimension of interactivity to the application.
+This task implemented the interactive "Action" prompt types, which required access to the user's microphone and camera. This added a new dimension of interactivity to the application, allowing for prompts like "Speak affirmation" and "Smile challenge".
 
-### 2. Key Functionalities to be Implemented
+### 2. Key Functionalities
 
--   **Microphone Permission:**
-    -   Properly request microphone access from the user with a clear explanation.
-    -   Handle the case where permission is denied.
--   **Audio Recording & Playback:**
-    -   For "Speak affirmation" prompts, provide UI to start and stop a short audio recording.
-    -   After recording, allow the user to play back their recording.
-    -   Recordings will be stored as temporary files and deleted after the prompt window is closed, unless explicitly saved by the user (a post-V1 feature).
--   **Camera Permission & Capture:**
-    -   Properly request camera access from the user.
-    -   For "Smile challenge" prompts, display a live camera preview.
-    -   Provide a button to capture a still image.
+-   **Microphone Workflow:**
+    -   Successfully implemented runtime permission requests for microphone access using `AVCaptureDevice`.
+    -   The UI now supports a full record/stop/playback flow for audio clips.
+    -   Recordings are saved to a temporary `.caf` file via `AVAudioEngine` and are discarded when the app is closed.
+-   **Camera Workflow:**
+    -   Implemented runtime permission requests for camera access.
+    -   A live camera preview is displayed within the prompt window for relevant prompts using `AVCaptureSession`.
+    -   A full capture/review/retake flow was created. Captured images are held in memory temporarily for review and are not saved to disk, per the project specification.
 -   **Dynamic Prompt UI:**
-    -   The `PromptWindow` will be updated to show the correct UI controls based on the specific action prompt type.
+    -   The `ActionPromptView` was created to dynamically show the correct UI (microphone or camera controls) based on keywords in the prompt's text.
+-   **Sandbox Integration:**
+    -   The project was correctly configured with the necessary App Sandbox entitlements ("Audio Input", "Camera") and `Info.plist` usage descriptions to allow hardware access.
 
-### 3. Architectural Considerations
+### 3. File Changes
 
--   A `PermissionsManager` will be created to handle the logic for checking and requesting system permissions.
--   An `AudioEngine` or similar service will be created to encapsulate the complexities of `AVFoundation` for recording and playback.
--   The `PromptWindow` view will become more stateful to manage the different UI states (e.g., ready, recording, playback).
--   The `Info.plist` file must be updated with usage descriptions for both the microphone (`NSMicrophoneUsageDescription`) and camera (`NSCameraUsageDescription`).
+#### New Files Created
 
-### 4. Potential Enhancements (Post-V1)
+-   `beKing/Sources/Actions/AudioService.swift`: An `ObservableObject` that encapsulates all logic for microphone permissions, recording, and playback.
+-   `beKing/Sources/Actions/CameraService.swift`: An `ObservableObject` that manages camera permissions, the `AVCaptureSession`, and photo capture.
+-   `beKing/Sources/Actions/ActionPromptView.swift`: A dedicated SwiftUI view to handle the complex UI states for both microphone and camera interactions.
+-   `beKing/Sources/Actions/CameraPreviewView.swift`: An `NSViewRepresentable` wrapper to display the live `AVCaptureSession` preview in SwiftUI.
 
-- **Real-time Audio Waveform:** For a better user experience during recording, a real-time visualization of the audio waveform (similar to a voice note) could be displayed. This would involve more complex audio buffer analysis and custom drawing in SwiftUI.
+#### Existing Files Modified
 
+-   `beKing/PromptWindowHost.swift`: Updated to create and own instances of the new `AudioService` and `CameraService`.
+-   `beKing/PromptWindow.swift`: Updated to accept and pass the new services down to the `ActionPromptView`.
+-   `Info.plist` & `beKing.xcodeproj`: Updated by the user to include the necessary hardware usage descriptions and App Sandbox entitlements.
+
+### 4. Architectural Decisions & Notes
+
+-   **Dedicated Services:** All complex `AVFoundation` logic was encapsulated in dedicated, `ObservableObject`-conforming services (`AudioService`, `CameraService`), separating low-level hardware interaction from the UI.
+-   **Specialized View:** A dedicated `ActionPromptView` was created to handle the multiple states of these complex prompts, preventing the main `PromptWindow` from becoming overly complicated.
+-   **Platform-Specific APIs:** The implementation required careful use of macOS-specific APIs (e.g., `AVCaptureDevice` for permissions) after initial attempts with incorrect, iOS-only APIs (`AVAudioSession`) failed. This was a key learning and debugging experience.
+
+### 5. Potential Enhancements (Post-V1)
+
+- **Real-time Audio Waveform:** For a better user experience during recording, a real-time visualization of the audio waveform could be displayed.

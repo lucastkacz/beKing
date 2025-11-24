@@ -55,7 +55,7 @@ Create a feature-rich browser for users to review and export their journal entri
 
 ---
 
-### ⏳ Task 5: Action Prompts (Mic & Camera)
+### ✅ Task 5: Action Prompts (Mic & Camera)
 
 Implement the interactive "Action" prompt types.
 - **Goals:**
@@ -63,7 +63,7 @@ Implement the interactive "Action" prompt types.
   - **Camera:** For "Smile challenge" prompts, request camera permission, show a live preview, and capture a still image.
   - Update the `PromptWindow` to dynamically display the appropriate UI for these new types.
   - Ensure graceful handling of cases where permission is denied.
-- **Status:** Not Started.
+- **Status:** Complete.
 
 ---
 
@@ -76,7 +76,7 @@ Prepare the application for a V1 release.
   * **Error Handling:** Conduct a full review of error handling paths (e.g., file IO, permissions) to ensure the app never crashes unexpectedly.
   - **Accessibility:** Perform a review to ensure all UI elements have VoiceOver labels and are navigable.
   - **Packaging:** Configure signing and prepare the app for distribution (e.g., as a `.dmg` file).
-- **Status:** Not Started.
+- **Status:** In Progress.
 
 ---
 
